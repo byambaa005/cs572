@@ -27,21 +27,25 @@
             const starStr = "***";
 
             origArr = origArr.map((value, index) => {
-                if(strArr.includes(value)) {
-                    origArr[index] = starStr
-                }
-                console.log(origArr);
-            });
+                new Promise(function (resolve, reject) {
+                    const arrIncluded = strArr.includes(value);
+                    if (arrIncluded) {
+                        origArr[index] = starStr;
+                        resolve(origArr.join(' '));
+                    } else {
+                        reject();
+                    }
+                });
 
-            // return new Promise(function (resolve, reject) {
-            //         resolve(newArr);
-            // }).then(function (result) {
-            //     console.log("Promise returned: " + result);
-            // }).catch(function (err) {
-            //     console.log(err);
-            // });
+            }).then(data => {return data})
+                    .catch((err)=>{console.log(err)});
+
         };
         console.log("This house is nice!".filterWords(['house', 'nice!']))
+    }
+
+    function ex03() {
+
     }
     // ex01();
     ex02();
