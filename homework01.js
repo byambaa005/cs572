@@ -20,39 +20,35 @@
 
     }
 
-    function ex02(str) {
+    function ex02() {
         String.prototype.filterWords = function (strArr) {
 
-            const origArr = this.split(" ");
+            let origArr = this.split(" ");
             const starStr = "***";
 
-
-            return new Promise(function (resolve, reject) {
-                origArr.forEach(function(value, index) {
-                    if (str.split(" ").includes(value)) {
+            origArr = origArr.map((value, index) => {
+                new Promise(function (resolve, reject) {
+                    const arrIncluded = strArr.includes(value);
+                    if (arrIncluded) {
                         origArr[index] = starStr;
                         resolve(origArr.join(' '));
                     } else {
-                        reject(str);
+                        reject();
                     }
                 });
-            }).then(function (result) {
-                console.log("Promise returned: " + result);
-            }).catch(function (err) {
-                console.log(err);
-            });
+
+            }).then(data => {return data})
+                    .catch((err)=>{console.log(err)});
 
         };
-        console.log("This house is nice!".filterWords(['house', 'nice!']));
-
+        console.log("This house is nice!".filterWords(['house', 'nice!']))
     }
 
-    function isWeekend () {
+    function ex03() {
 
     }
-
-    ex01();
-    ex02("This house is nice!");
+    // ex01();
+    ex02();
     // ex03();
 
 }());
