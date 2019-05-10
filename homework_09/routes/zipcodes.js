@@ -18,8 +18,6 @@ router.get('/population', async function(req, res, next) {
 
     const popSize = req.query.size;
 
-    console.log(popSize);
-
     const collection = db.get().collection('zips');
     const response = await collection.aggregate([
         {$match: {pop: {$lt : parseInt(popSize)}}},
@@ -27,6 +25,19 @@ router.get('/population', async function(req, res, next) {
         // {$project: {_id: 0, city: "$_id.city", state: "$_id.state", population: 1, zip_codes: 1}},
         {$sort: {pop: -1}},
         {$limit: 100}
+    ]).toArray();
+
+    res.status(200).json(response);
+});
+
+router.get('/least', async function(req, res, next) {
+
+    const collection = db.get().collection('zips');
+    const response = await collection.aggregate([
+        {$group: {_id: {city: "$city", state: "$state"}, population: {$sum: "$pop"}}},
+        {$sort: {"_id.state": 1, population: 1}},
+        {$group: {_id: "$_id.state", city: {$first: "$_id.city"}, population: {$first: "$population"}}},
+        {$sort: {"_id": 1}}
     ]).toArray();
 
     res.status(200).json(response);
